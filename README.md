@@ -16,6 +16,7 @@ From here you need to install the following nuget packages:
 
 These packages are in beta so you'll need to search for the preview packages. What these lets us do is to push messages to our hub and allows users to subscribe to a hub. Finally you'll need to add a connection string from your PubSub service to the local.settings.json file of your function app. You can find the connection string to the Web PubSub service by going to **Keys > Connection String (under the 'Primary')**. See screen shot below:
 ![pubsub connection string](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/g4a6az01f4rf5m12fi04.PNG) I have left a sample of what my settings file looks like below after adding the connection string:
+
 ```json
 {
   "IsEncrypted": false,
@@ -31,6 +32,7 @@ These packages are in beta so you'll need to search for the preview packages. Wh
 The code for this is very straight forward.
 We need a function to push data to our hub and a function to let users subscribe to our hub.
 Here is the code to get users to subscribe to our hub:
+
 ```csharp
     public static class Subscribe
     {
@@ -43,16 +45,20 @@ Here is the code to get users to subscribe to our hub:
         }
     }
 ```
+
 This function essentially establishes a connection to our hub and it returns a json response. Below is a sample response from the endpoint:
+
 ```json
 {
     "baseUrl": "[base URL]",
     "url": "[base URL with access token]",
     "accessToken": "[the access token]"
 }
-``` 
+```
+
 The main value we want to make use of is the 'url' field. The value of this is our connection to the hub in the PubSub Service.
 And here is the code to push data to our hub.
+
 ```csharp
     public class PublishData
     {
@@ -68,6 +74,7 @@ And here is the code to push data to our hub.
         }
     }
 ```
+
 Essentially what this is doing is sending the data to all subscribers of the hub defined in the binding of our function in our case 'test'.
 <br/>
 **Notes**
