@@ -1,0 +1,29 @@
+﻿<html>
+<body>
+    <h1>Websocket Output</h1>
+    <p></p>
+    <div id="notifications"></div>
+    <script>
+        (async function () {
+            // negotiate
+            let messages = document.querySelector('#notifications');
+            let res = await fetch("http://localhost:7071/api/Subscribe", { method: 'POST' });
+            let url = await res.json();
+            // connect
+            let ws = new WebSocket(url.url);
+            ws.onopen = () => AddNotification('Connected...');
+            ws.onmessage = event => {
+                AddNotification(`Time of last update: ${event.data}`);
+            };
+            ws.onclose = () => AddNotification('Connection lost');
+
+            function AddNotification(notification)
+            {
+                let m = document.createElement('p');
+                m.innerText = notification;
+                messages.appendChild(m);
+            }
+        })();
+    </script>
+</body>
+</html>
